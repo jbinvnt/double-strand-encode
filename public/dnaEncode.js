@@ -19,8 +19,8 @@ class RealtimeTextInput extends React.Component {
     if(this.state.binaryValue) {
       for(let i = 0; i <= this.state.binaryValue.length; i += 2) {
         let currentBit = this.state.binaryValue.substring(i, i + 2);
-        strand1.push(convertToDNA(currentBit));
-        strand2.push(convertToDNA(onesComplement(currentBit)));
+        strand1.push(convertToDNA(currentBit, 2*i));
+        strand2.push(convertToDNA(onesComplement(currentBit, 2*i+1)));
       }
     }
     return (
@@ -57,20 +57,20 @@ function convertToBinary(inputText) {
   }
   return binaryString;
 }
-function convertToDNA(twoBitString) {
+function convertToDNA(twoBitString, newKey) {
   let result = <p></p>;
   switch(twoBitString) {
     case "00":
-    result = <Base color="primary" letter="A"/>;
+    result = <Base color="primary" letter="A" key={newKey}/>;
     break;
     case "01":
-    result = <Base color="success" letter="G"/>;
+    result = <Base color="success" letter="G" key={newKey}/>;
     break;
     case "10":
-    result = <Base color="warning" letter="C"/>
+    result = <Base color="warning" letter="C" key={newKey}/>
     break;
     case "11":
-    result = <Base color="danger" letter="T"/>
+    result = <Base color="danger" letter="T" key={newKey}/>
     break;
   }
   return result;
