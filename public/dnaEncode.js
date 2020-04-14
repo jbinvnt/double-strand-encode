@@ -10,33 +10,42 @@ class RealtimeTextInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentValue: ''
+      binaryValue: ''
     };
   }
   render() {
-    let bases = [];
+    let strand1 = [];
+    let strand2 = [];
     if(this.state.binaryValue) {
       for(let i = 0; i <= this.state.binaryValue.length; i += 2) {
-        bases.push(convertToDNA(this.state.binaryValue.substring(i, i + 2)));
+        let currentBit = this.state.binaryValue.substring(i, i + 2);
+        strand1.push(convertToDNA(currentBit));
+        strand2.push(convertToDNA(onesComplement(currentBit)));
       }
     }
     return (
-      <div className="w-100">
-        <p className="lead">Enter regular text: </p>
+      <div className="w-100 input-group-lg">
         <input
           type="text" className="form-control" placeholder={this.props.prompt}
           onChange={e => {
-            this.setState({ currentValue: e.target.value });
-            this.setState({ binaryValue : convertToBinary(this.state.currentValue)});
+            this.setState({ binaryValue: convertToBinary(e.target.value)});
           }}
         />
+        <div className="dnaStrand">
+        <h2>Binary representation:</h2>
         <p>{this.state.binaryValue}</p>
-        <span>{bases}</span>
+        <h2>Double strand DNA representation:</h2>
+        <span>{strand1}</span>
+        <span>{strand2}</span>
+        </div>
         </div>
     );
   }
 }
 const BYTE_SIZE = 8;
+function onesComplement(binaryString) {
+  return binaryString.split('').map(character => (character == "1" ? "0" : "1")).join('');
+}
 function convertToBinary(inputText) {
   let binaryString = "";
   for(let i = 0; i < inputText.length; i++) {
@@ -66,7 +75,7 @@ function convertToDNA(twoBitString) {
   }
   return result;
 }
-const textInput = <RealtimeTextInput prompt="Hello, DNA!"/>
+const textInput = <RealtimeTextInput prompt="Enter some text"/>
 const bases = (<React.Fragment>
 
            </React.Fragment>);
